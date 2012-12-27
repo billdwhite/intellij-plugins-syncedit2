@@ -20,7 +20,7 @@ implements IntentionAction {
                 ||
                 (editor.getCaretModel().getOffset() > SyncEditModeController.getActiveRangeBoxHighlighter().getEndOffset())) {
                 if (editor.getSelectionModel().hasSelection()) {
-                    SyncEditModeController.leaveSyncEditMode();
+                    //SyncEditModeController.leaveSyncEditMode();
                     SyncEditModeController.enterSyncEditMode(editor);
                 }
             }
@@ -40,7 +40,7 @@ implements IntentionAction {
         boolean enable = true;
         Editor editor = EditorUtils.getEditor(e);
         if (!SyncEditModeController.isInSyncEditMode(editor)) {
-            SyncEditModeController.leaveSyncEditMode();
+            //SyncEditModeController.leaveSyncEditMode();
             if ((editor == null) || (!editor.getSelectionModel().hasSelection())) {
                 enable = false;
             }
