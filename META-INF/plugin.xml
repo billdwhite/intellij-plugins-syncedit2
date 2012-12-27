@@ -1,0 +1,96 @@
+<idea-plugin version="2">
+    <name>SyncEdit</name>
+    <description><![CDATA[
+    This is version 2.0 of the original SyncEdit plugin created by Nathan Brown.  It has not been updated since 2006 and has
+    not worked cleanly since IntelliJ IDEA version 9. I have attempted to manually patch it and get it working again.  I hope
+    to add additional features and functionality but for now it is just an updated release of the original code.  The first
+    version had no published license and numerous attempts at contacting the auther went unanswered so I have simply cloned
+    it and am releasing it as an open source version 2.0.
+
+    This plugin allows you to do an inplace synchronized edit of all instances of a string within a defined range.<br><br>
+
+    A "SyncEdit Mode" menu item is added to the Search and Editor Popup menus.  Simply select a range to be edited,
+    enter "SyncEdit Mode" and all words in the marked range become 'live' - any changes to an instance of a word changes
+    all matching strings in real-time.<br><br>
+
+    When in SyncEdit mode, pressing TAB/Ctrl+TAB will take you forward to the next/previous SyncEditable word found, respectively.<br><br>
+
+    The decision about the word to SyncEdit is determined by a 'Select Word' type operation at the current cursor location
+    (respecting any CamelHump settings) when a modification is made. However, you can SyncEdit a custom region of text by
+    first selecting it and then invoking the SyncEdit action again, or even just start typing to replace the substring
+    completely.<br><br>
+
+    There is also a "Paste with SyncEdit" action added to the Edit Menu - this will execute a paste and automatically
+    enter SyncEdit Mode for the range of the pasted text, great for tweaking pasted code fragments for the context they
+    are used in.<br><br>
+
+    The mode can be exited by pressing either escape or enter - once to exit SyncEdit on a word, and once again to stop
+    SyncEditing a range.  The colours used by the SyncEdit plugin can be customised on the Plugins tab of the editor
+    Colors & Fonts settings.<br><br>
+    ]]>
+    </description>
+    <version>2.0</version>
+    <vendor email="billdwhite@gmail.com ">Bill White</vendor>
+    <change-notes><![CDATA[
+    2.0 - Syncing version to name
+    1.0 - Initial version directly built upon SyncEdit originally created by Nathan Brown (abandoned since 2006)
+    ]]>
+    </change-notes>
+    <idea-version since-build="123.94"/>
+    <application-components>
+        <component>
+            <implementation-class>org.ideaplugins.syncedit.SyncEditApplicationComponent</implementation-class>
+        </component>
+    </application-components>
+    <project-components>
+        <component>
+            <implementation-class>org.ideaplugins.syncedit.SyncEditProjectComponent</implementation-class>
+        </component>
+    </project-components>
+    <actions>
+        <action id="SyncEditModeAction"
+                class="org.ideaplugins.syncedit.SyncEditModeAction"
+                text="SyncEdit Mode"
+                description="Activate SyncEdit Mode">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="ctrl alt R"/>
+            <add-to-group group-id="EditorPopupMenu"
+                          anchor="after"
+                          relative-to-action="RefactoringMenu"/>
+        </action>
+        <action id="SyncEditModePasteAction"
+                class="org.ideaplugins.syncedit.SyncEditModePasteAction"
+                text="Paste with SyncEdit"
+                description="Execute a paste, setting SyncEdit mode on the pasted block">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="ctrl alt INSERT"/>
+            <add-to-group group-id="CutCopyPasteGroup"
+                          anchor="after"
+                          relative-to-action="EditorPasteSimple"/>
+        </action>
+        <action id="PreviousSyncEditableWordAction"
+                class="org.ideaplugins.syncedit.PreviousSyncEditableWordAction"
+                text="Previous SyncEditable Word"
+                description="Selects the previous SyncEditable word when in SyncEdit Mode">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="ctrl TAB"/>
+            <add-to-group group-id="EditorActions"
+                          anchor="last"/>
+            <add-to-group group-id="GoToMenu"
+                          anchor="after"
+                          relative-to-action="GotoPreviousTodo"/>
+        </action>
+        <action id="NextSyncEditableWordAction"
+                class="org.ideaplugins.syncedit.NextSyncEditableWordAction"
+                text="Next SyncEditable Word"
+                description="Selects the next SyncEditable word when in SyncEdit Mode">
+            <keyboard-shortcut keymap="$default"
+                               first-keystroke="TAB"/>
+            <add-to-group group-id="EditorActions"
+                          anchor="last"/>
+            <add-to-group group-id="GoToMenu"
+                          anchor="after"
+                          relative-to-action="PreviousSyncEditableWordAction"/>
+        </action>
+    </actions>
+</idea-plugin>
