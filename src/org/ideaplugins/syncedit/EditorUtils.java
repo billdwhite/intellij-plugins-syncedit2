@@ -50,10 +50,14 @@ public class EditorUtils {
 
     private static TextRange a(CharSequence charsequence, int i) {
         //System.out.println("EditorUtils.a(charsequence=" + charsequence + ")");
-        if ((i > 0) && (!Character.isJavaIdentifierPart(charsequence.charAt(i))) && (Character.isJavaIdentifierPart(
-        charsequence.charAt(i - 1)))) {
+        if ((i > 0)
+            &&
+            (!Character.isJavaIdentifierPart(charsequence.charAt(i)))
+            &&
+            (Character.isJavaIdentifierPart(charsequence.charAt(i - 1)))) {
             i--;
         }
+
         if (Character.isJavaIdentifierPart(charsequence.charAt(i))) {
             int j = i;
             int k = i + 1;
@@ -63,8 +67,11 @@ public class EditorUtils {
                 char c = charsequence.charAt(j - 1);
                 char c2 = charsequence.charAt(j);
                 char c4 = j + 1 >= l ? '\000' : charsequence.charAt(j + 1);
-                if (((Character.isLowerCase(c)) && (Character.isUpperCase(c2))) || ((c == '_') && (c2 != '_')) || ((Character.isUpperCase(
-                c)) && (Character.isUpperCase(c2)) && (Character.isLowerCase(c4)))) {
+                if (((Character.isLowerCase(c)) && (Character.isUpperCase(c2)))
+                    ||
+                    ((c == '_') && (c2 != '_'))
+                    ||
+                    ((Character.isUpperCase(c)) && (Character.isUpperCase(c2)) && (Character.isLowerCase(c4)))) {
                     break;
                 }
                 j--;
@@ -74,12 +81,16 @@ public class EditorUtils {
                 char c1 = charsequence.charAt(k - 1);
                 char c3 = charsequence.charAt(k);
                 char c5 = k + 1 >= l ? '\000' : charsequence.charAt(k + 1);
-                if (((Character.isLowerCase(c1)) && (Character.isUpperCase(c3))) || ((c1 != '_') && (c3 == '_')) || ((Character.isUpperCase(
-                c1)) && (Character.isUpperCase(c3)) && (Character.isLowerCase(c5)))) {
+                if (((Character.isLowerCase(c1)) && (Character.isUpperCase(c3)))
+                    ||
+                    ((c1 != '_') && (c3 == '_'))
+                    ||
+                    ((Character.isUpperCase(c1)) && (Character.isUpperCase(c3)) && (Character.isLowerCase(c5)))) {
                     break;
                 }
                 k++;
             }
+
             if (j + 1 < k) {
                 return new TextRange(j, k);
             }
@@ -94,8 +105,11 @@ public class EditorUtils {
         if (charsequence.length() == 0) {
             return null;
         }
-        if ((i > 0) && (!Character.isJavaIdentifierPart(charsequence.charAt(i))) && (Character.isJavaIdentifierPart(
-        charsequence.charAt(i - 1)))) {
+        if ((i > 0)
+            &&
+            (!Character.isJavaIdentifierPart(charsequence.charAt(i)))
+            &&
+            (Character.isJavaIdentifierPart(charsequence.charAt(i - 1)))) {
             i--;
         }
         if (Character.isJavaIdentifierPart(charsequence.charAt(i))) {
@@ -128,10 +142,12 @@ public class EditorUtils {
                 if (selectionStart < caretOffset) {
                     newSelectionStart = selectionStart;
                 }
-                else if (selectionEnd < toOffset) {
+                else
+                if (selectionEnd < toOffset) {
                     newSelectionStart = selectionEnd;
                 }
-                else if (selectionEnd == toOffset) {
+                else
+                if (selectionEnd == toOffset) {
                     newSelectionStart = toOffset;
                 }
                 else {
@@ -139,7 +155,6 @@ public class EditorUtils {
                     newSelectionEnd = selectionEnd;
                 }
             }
-
             selectionModel.setSelection(newSelectionStart, newSelectionEnd);
         }
         else {
@@ -164,10 +179,12 @@ public class EditorUtils {
                 if (selectionEnd > caretOffset) {
                     newSelectionEnd = selectionEnd;
                 }
-                else if (selectionStart > toOffset) {
+                else
+                if (selectionStart > toOffset) {
                     newSelectionEnd = selectionStart;
                 }
-                else if (selectionStart == toOffset) {
+                else
+                if (selectionStart == toOffset) {
                     newSelectionEnd = toOffset;
                 }
                 else {
@@ -190,7 +207,6 @@ public class EditorUtils {
         //System.out.println("findMatchingWordRanges(editor=" + editor + ", rangeStart=" + rangeStart + ", rangeEnd=" + rangeEnd + ", selectedWord=" + selectedWord + ")");
         List result = new ArrayList();
         String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
-
         int wordLength = selectedWord.length();
         int cursor = 0;
         while ((cursor >= 0) && (cursor < activeRangeText.length())) {
