@@ -8,20 +8,12 @@ import java.util.regex.Pattern;
 public class WholeWordIndexFinder {
 
 
-    private String searchString;
+    private String _searchString;
 
 
 
     public WholeWordIndexFinder(String searchString) {
-        this.searchString = searchString;
-    }
-
-
-
-    public static void main(String[] args) {
-        WholeWordIndexFinder finder = new WholeWordIndexFinder("don’t be evil.being evil is bad");
-        List<IndexWrapper> indexes = finder.findIndexesForKeyword("be");
-        System.out.println("Indexes found " + indexes.size() + " keyword found at index : " + indexes.get(0).getStart());
+        this._searchString = searchString;
     }
 
 
@@ -29,7 +21,7 @@ public class WholeWordIndexFinder {
     public List<IndexWrapper> findIndexesForKeyword(String keyword) {
         String regex = "\\b" + keyword + "\\b";
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(searchString);
+        Matcher matcher = pattern.matcher(this._searchString);
 
         List<IndexWrapper> wrappers = new ArrayList<IndexWrapper>();
 
