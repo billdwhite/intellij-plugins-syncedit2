@@ -496,8 +496,13 @@ public class SyncEditModeController {
     private static void activeEditorDocumentChange(DocumentEvent e) {
         //System.out.println("SyncEditModeController.activeEditorDocumentChange()");
         UndoManager undoManager = UndoManager.getInstance(_activeEditor.getProject());
-        if ((!_modifyingDocument) && (!undoManager.isUndoInProgress()) && (!undoManager.isRedoInProgress()) &&
-        (getSelectedWordBoxHighlight() != null)) {
+        if ((!_modifyingDocument)
+            &&
+            (!undoManager.isUndoInProgress())
+            &&
+            (!undoManager.isRedoInProgress())
+            &&
+            (getSelectedWordBoxHighlight() != null)) {
             int editOffset = e.getOffset();
             int boxStartOffset = getSelectedWordBoxHighlight().getStartOffset();
             int boxEndOffset = getSelectedWordBoxHighlight().getEndOffset();
@@ -514,6 +519,7 @@ public class SyncEditModeController {
         _modifyingDocument = true;
         try {
             int caretOffset = _activeEditor.getCaretModel().getOffset();
+            int caretOffsetCorrection = 0;
             int subOffset = e.getOffset() - getSelectedWordBoxHighlight().getStartOffset();
             int lengthRemoved = e.getOldLength();
             if (lengthRemoved > 0) {
@@ -522,11 +528,14 @@ public class SyncEditModeController {
                     if (rangeHighlighter != _selectedWordColorHighlight) {
                         int otherOffset = rangeHighlighter.getStartOffset() + subOffset;
                         _activeEditor.getDocument().deleteString(otherOffset, otherOffset + lengthRemoved);
+                        if (otherOffset < caretOffset) {
+                            caretOffsetCorrection -= lengthRemoved;
+                        }
                     }
                 }
             }
+
             int lengthAdded = e.getNewLength();
-            int caretOffsetCorrection = 0;
             if (lengthAdded > 0) {
                 for (int i = _matchingWordColorHighlighters.size() - 1; i >= 0; i--) {
                     RangeHighlighter rangeHighlighter = _matchingWordColorHighlighters.get(i);
@@ -539,13 +548,12 @@ public class SyncEditModeController {
                     }
                 }
             }
+
             if (caretOffsetCorrection != 0) {
                 final int finalCaretOffsetCorrection = caretOffsetCorrection;
-
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         int oldOffset = SyncEditModeController._activeEditor.getCaretModel().getOffset();
-                        //int newOffset = oldOffset + this.val$finalCaretOffsetCorrection;
                         int newOffset = oldOffset + finalCaretOffsetCorrection;
                         SyncEditModeController._activeEditor.getCaretModel().moveToOffset(newOffset);
                         SyncEditModeController._activeEditor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
