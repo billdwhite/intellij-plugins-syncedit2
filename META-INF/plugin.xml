@@ -32,8 +32,7 @@
     <version>2.0</version>
     <vendor email="billdwhite@gmail.com">Bill White</vendor>
     <change-notes><![CDATA[
-    2.0 - Changing version to correspond with name. Now works with multiple project windows open. Refactors whole
-          words only now instead of words and substrings in other words.
+    2.0 - Changing version to correspond with name. Now works with multiple project windows open. Refactors whole words only now instead of words and substrings in other words.
     1.0 - Initial version directly built upon SyncEdit originally created by Nathan Brown (last updated 2006)
     ]]>
     </change-notes>
