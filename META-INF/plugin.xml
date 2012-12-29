@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-    <name>SyncEdit</name>
+    <name>SyncEdit 2</name>
     <description><![CDATA[
     This is version 2.0 of the original SyncEdit plugin created by Nathan Brown.  It has not been updated since 2006 and has
     not worked cleanly since IntelliJ IDEA version 9. I have attempted to manually patch it and get it working again.  I hope
@@ -37,7 +37,7 @@
     <version>2.0</version>
     <vendor email="billdwhite@gmail.com">Bill White</vendor>
     <change-notes><![CDATA[
-    2.0 - Syncing version to name
+    2.0 - Changing version to correspond with name
     1.0 - Initial version directly built upon SyncEdit originally created by Nathan Brown (abandoned since 2006)
     ]]>
     </change-notes>
