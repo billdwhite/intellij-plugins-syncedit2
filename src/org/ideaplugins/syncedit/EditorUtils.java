@@ -221,7 +221,6 @@ public class EditorUtils {
         */
 
         // method 2 - whole words only
-        String activeRangeText2 = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
         WholeWordIndexFinder wholeWordIndexFinder = new WholeWordIndexFinder(activeRangeText);
         List<IndexWrapper> results = wholeWordIndexFinder.findIndexesForKeyword(selectedWord);
         for (IndexWrapper nextIndex : results) {

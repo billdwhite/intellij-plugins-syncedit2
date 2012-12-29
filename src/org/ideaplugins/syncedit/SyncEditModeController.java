@@ -706,9 +706,8 @@ public class SyncEditModeController {
                 int limit = shouldFindCompoundWords() ? Math.min(wordRanges.length, 1) : wordRanges.length;
                 for (int i = 0; i < limit; i++) {
                     TextRange wordRange = wordRanges[i];
-                    boolean isWordPart = i == 0;
                     if ((wordRange.getStartOffset() >= getActiveRangeStartOffset()) && (wordRange.getEndOffset() <= getActiveRangeEndOffset())) {
-                        addWord(wordRange, isWordPart);
+                        addWord(wordRange);
                     }
                 }
                 int wordLength = 1;
@@ -721,7 +720,7 @@ public class SyncEditModeController {
 
 
 
-    private static void addWord(TextRange wordRange, boolean isWordPart) {
+    private static void addWord(TextRange wordRange) {
         //System.out.println("SyncEditModeController.addWord(wordRange=" + wordRange +  ", isWordPart=" + isWordPart + ")");
         String wordText =
             _activeEditor.getDocument().getCharsSequence().subSequence(wordRange.getStartOffset(), wordRange.getEndOffset()).toString();
@@ -730,8 +729,7 @@ public class SyncEditModeController {
                 Word lastWord = _words.get(i);
                 int lastWordEnd = lastWord.getFirstInstanceRange().getEndOffset();
                 if (lastWordEnd == wordRange.getStartOffset()) {
-                    addWord(new TextRange(lastWord.getFirstInstanceRange().getStartOffset(), wordRange.getEndOffset()),
-                            false);
+                    addWord(new TextRange(lastWord.getFirstInstanceRange().getStartOffset(), wordRange.getEndOffset()));
                 }
                 else if (lastWordEnd < wordRange.getStartOffset()) {
                     break;
@@ -790,12 +788,6 @@ public class SyncEditModeController {
         private int _end;
 
         public Fragment() {
-        }
-
-        public Fragment(String text, int start, int end) {
-            this._text = text;
-            this._start = start;
-            this._end = end;
         }
 
         public int getEnd() {

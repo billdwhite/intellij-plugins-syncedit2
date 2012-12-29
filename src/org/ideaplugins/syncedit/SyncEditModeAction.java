@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.NotNull;
 
 public class SyncEditModeAction
 extends AnAction
@@ -58,25 +59,27 @@ implements IntentionAction {
 
 
 
+    @NotNull
     public String getText() {
         return "Enter SyncEdit Mode for selection";
     }
 
 
 
+    @NotNull
     public String getFamilyName() {
         return "SyncEdit";
     }
 
 
 
-    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
         return (editor.getSelectionModel().hasSelection()) && (!SyncEditModeController.isInSyncEditMode());
     }
 
 
 
-    public void invoke(Project project, Editor editor, PsiFile file)
+    public void invoke(@NotNull Project project, Editor editor, PsiFile file)
     throws IncorrectOperationException {
         executeForEditor(editor);
     }

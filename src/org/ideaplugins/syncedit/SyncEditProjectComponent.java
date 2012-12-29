@@ -2,7 +2,6 @@ package org.ideaplugins.syncedit;
 
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class SyncEditProjectComponent

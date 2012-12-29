@@ -119,8 +119,7 @@ public class PluginColorSettingsPageImpl
         if (this._demoText == null) {
             this._demoText = "";
             for (String _demoTextFragment : this._demoTextFragments) {
-                String s = _demoTextFragment;
-                this._demoText = (this._demoText + s + "\n\n");
+                this._demoText = (this._demoText + _demoTextFragment + "\n\n");
             }
             this._demoText += "<info>This Color Settings Panel has been designed as a central place for any colour settings \nthat are needed to be defined by Plug-ins.  " +
                               "The current implementations of ColorSettingsPanel\n provided in the OpenAPI cannot be easily extended by Plug-ins, but this is an implementation \n" +
