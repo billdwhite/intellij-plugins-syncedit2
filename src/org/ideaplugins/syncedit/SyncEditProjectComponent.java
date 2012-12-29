@@ -3,16 +3,13 @@ package org.ideaplugins.syncedit;
 import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
 
 public class SyncEditProjectComponent
 implements ProjectComponent {
 
-    private final Project _project;
 
-
-
-    public SyncEditProjectComponent(Project project) {
-        this._project = project;
+    public SyncEditProjectComponent() {
         //System.out.println("SyncEditComponent(" + project + ")");
     }
 
@@ -30,6 +27,7 @@ implements ProjectComponent {
 
 
 
+    @NotNull
     public String getComponentName() {
         //System.out.println("SyncEditComponent getComponentName()");
         return "SyncEditIntentionAction";
@@ -39,7 +37,7 @@ implements ProjectComponent {
 
     public void projectOpened() {
         //System.out.println("SyncEditComponent projectOpened()");
-        IntentionManager.getInstance(this._project).addAction(new SyncEditModeAction());
+        IntentionManager.getInstance().addAction(new SyncEditModeAction());
     }
 
 

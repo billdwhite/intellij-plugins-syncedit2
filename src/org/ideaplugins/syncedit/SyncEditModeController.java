@@ -24,16 +24,16 @@ import java.util.List;
 public class SyncEditModeController {
 
 
-    private static final String ACTION_EDITOR_MOVE_LINE_START_WITH_SELECTION = "EditorLineStartWithSelection";
-    private static final String ACTION_EDITOR_MOVE_LINE_END_WITH_SELECTION = "EditorLineEndWithSelection";
+    //private static final String ACTION_EDITOR_MOVE_LINE_START_WITH_SELECTION = "EditorLineStartWithSelection";
+    //private static final String ACTION_EDITOR_MOVE_LINE_END_WITH_SELECTION = "EditorLineEndWithSelection";
     private static boolean _hasSyncEditSelection;
     private static RangeHighlighter _selectedWordBoxHighlight;
     private static RangeHighlighter _selectedWordColorHighlight;
-    private static List _matchingWordColorHighlighters = new ArrayList();
+    private static List<RangeHighlighter> _matchingWordColorHighlighters = new ArrayList<RangeHighlighter>();
     private static RangeHighlighter _activeRangeBoxHighlighter;
     private static Editor _activeEditor;
     private static boolean _modifyingDocument;
-    private static Map<String, Word> _wordMap = new HashMap();
+    private static Map<String, Word> _wordMap = new HashMap<String, Word>();
     private static List<Word> _words;
     private static List<Word> _repeatedWords;
     private static int _selectedRepeatedWordIndex = -1;
@@ -205,10 +205,12 @@ public class SyncEditModeController {
         }
         _activeEditor = editor;
         try {
+            /*
             Color effectColor = EditorColors.SEARCH_RESULT_ATTRIBUTES.getDefaultAttributes().getBackgroundColor();
             if (effectColor == null) {
                 effectColor = Color.magenta;
             }
+            */
             TextAttributes rangeAttributes = editor.getColorsScheme().getAttributes(SyncEditModeColors.ACTIVE_SYNC_EDIT_RANGE_ATTRIBUTES);
 
             _activeRangeBoxHighlighter = _activeEditor.getMarkupModel().addRangeHighlighter(rangeStart,
@@ -516,7 +518,7 @@ public class SyncEditModeController {
             int lengthRemoved = e.getOldLength();
             if (lengthRemoved > 0) {
                 for (int i = _matchingWordColorHighlighters.size() - 1; i >= 0; i--) {
-                    RangeHighlighter rangeHighlighter = (RangeHighlighter) _matchingWordColorHighlighters.get(i);
+                    RangeHighlighter rangeHighlighter = _matchingWordColorHighlighters.get(i);
                     if (rangeHighlighter != _selectedWordColorHighlight) {
                         int otherOffset = rangeHighlighter.getStartOffset() + subOffset;
                         _activeEditor.getDocument().deleteString(otherOffset, otherOffset + lengthRemoved);
@@ -527,7 +529,7 @@ public class SyncEditModeController {
             int caretOffsetCorrection = 0;
             if (lengthAdded > 0) {
                 for (int i = _matchingWordColorHighlighters.size() - 1; i >= 0; i--) {
-                    RangeHighlighter rangeHighlighter = (RangeHighlighter) _matchingWordColorHighlighters.get(i);
+                    RangeHighlighter rangeHighlighter = _matchingWordColorHighlighters.get(i);
                     if (rangeHighlighter != _selectedWordColorHighlight) {
                         int otherOffset = rangeHighlighter.getStartOffset() + subOffset;
                         _activeEditor.getDocument().insertString(otherOffset, e.getNewFragment());
@@ -607,7 +609,7 @@ public class SyncEditModeController {
 
     public static void selectNextRepeatedWord() {
         if (_activeEditor != null) {
-            List words = getRepeatedWords();
+            List<Word> words = getRepeatedWords();
             Word wordToSelect = null;
             if (!words.isEmpty()) {
                 if (_selectedRepeatedWordIndex == -1) {
@@ -625,7 +627,7 @@ public class SyncEditModeController {
                         _selectedRepeatedWordIndex = 0;
                     }
                     if (_selectedRepeatedWordIndex < words.size()) {
-                        wordToSelect = (Word) words.get(_selectedRepeatedWordIndex);
+                        wordToSelect = words.get(_selectedRepeatedWordIndex);
                     }
                 }
             }
@@ -639,7 +641,7 @@ public class SyncEditModeController {
 
     public static void selectLastRepeatedWord() {
         if (_activeEditor != null) {
-            List words = getRepeatedWords();
+            List<Word> words = getRepeatedWords();
             Word wordToSelect = null;
             if (!words.isEmpty()) {
                 if (_selectedRepeatedWordIndex == -1) {
@@ -657,7 +659,7 @@ public class SyncEditModeController {
                         _selectedRepeatedWordIndex = words.size() - 1;
                     }
                     if (_selectedRepeatedWordIndex > -1) {
-                        wordToSelect = (Word) words.get(_selectedRepeatedWordIndex);
+                        wordToSelect = words.get(_selectedRepeatedWordIndex);
                     }
                 }
             }
@@ -688,8 +690,8 @@ public class SyncEditModeController {
 
     private static List<Word> getRepeatedWords() {
         if (_repeatedWords == null) {
-            _repeatedWords = new ArrayList();
-            _words = new LinkedList();
+            _repeatedWords = new ArrayList<Word>();
+            _words = new LinkedList<Word>();
             int offset = getActiveRangeStartOffset();
             while (offset < getActiveRangeEndOffset()) {
                 TextRange[] wordRanges = EditorUtils.getWordsAtOffset(_activeEditor, offset);
@@ -713,12 +715,11 @@ public class SyncEditModeController {
 
     private static void addWord(TextRange wordRange, boolean isWordPart) {
         //System.out.println("SyncEditModeController.addWord(wordRange=" + wordRange +  ", isWordPart=" + isWordPart + ")");
-        String wordText = _activeEditor.getDocument().getCharsSequence().subSequence(wordRange.getStartOffset(),
-                                                                                     wordRange.getEndOffset()).toString();
-
+        String wordText =
+            _activeEditor.getDocument().getCharsSequence().subSequence(wordRange.getStartOffset(), wordRange.getEndOffset()).toString();
         if (shouldFindCompoundWords()) {
             for (int i = _words.size() - 1; i >= 0; i--) {
-                Word lastWord = (Word) _words.get(i);
+                Word lastWord = _words.get(i);
                 int lastWordEnd = lastWord.getFirstInstanceRange().getEndOffset();
                 if (lastWordEnd == wordRange.getStartOffset()) {
                     addWord(new TextRange(lastWord.getFirstInstanceRange().getStartOffset(), wordRange.getEndOffset()),
@@ -731,14 +732,14 @@ public class SyncEditModeController {
             _words.add(new Word(wordText, wordRange));
         }
 
-        Word word = (Word) _wordMap.get(wordText);
+        Word word = _wordMap.get(wordText);
         if (word == null) {
             TextRange[] matchingWordRanges = EditorUtils.findMatchingWordRanges(_activeEditor,
                                                                                 wordRange.getEndOffset(),
                                                                                 getActiveRangeEndOffset(),
                                                                                 wordText);
 
-            word = new Word(wordText, wordRange, matchingWordRanges, isWordPart);
+            word = new Word(wordText, wordRange, matchingWordRanges);
             _wordMap.put(wordText, word);
             if (word.isRepeated()) {
                 _repeatedWords.add(word);
@@ -776,7 +777,6 @@ public class SyncEditModeController {
 
 
     private static class Fragment {
-
         private String _text;
         private int _start;
         private int _end;

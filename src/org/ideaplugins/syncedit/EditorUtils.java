@@ -6,7 +6,6 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.util.TextRange;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,28 +13,29 @@ public class EditorUtils {
 
 
     public static TextRange[] getWordsAtOffset(Editor editor, int offset) {
-        //System.out.println("EditorUtils.getWordsAtOffset(editor=" + editor + ", offset=" + offset + ")");
+        System.out.println("EditorUtils.getWordsAtOffset(editor=" + editor + ", offset=" + offset + ")");
         Document document = editor.getDocument();
         CharSequence charsequence = document.getCharsSequence();
         if (offset == document.getTextLength()) {
             offset--;
         }
+        //System.out.println("EditorUtils.getWordsAtOffset(editor=" + editor + ", offset=" + offset + ")=" + getWordSelections(editor, charsequence, offset));
         return getWordSelections(editor, charsequence, offset);
     }
 
 
 
     private static TextRange[] getWordSelections(Editor editor, CharSequence charsequence, int offset) {
-        //System.out.println("EditorUtils.getWordSelections(editor=" + editor + ", charsequence=" + charsequence + ", offset=" + offset + ")");
-        ArrayList arraylist = new ArrayList();
+        System.out.println("EditorUtils.getWordSelections(editor=" + editor + ", charsequence=" + charsequence + ", offset=" + offset + ")");
+        ArrayList<TextRange> arraylist = new ArrayList<TextRange>();
         addWordSelection(editor.getSettings().isCamelWords(), charsequence, offset, arraylist);
-        return (TextRange[]) arraylist.toArray(new TextRange[arraylist.size()]);
+        return arraylist.toArray(new TextRange[arraylist.size()]);
     }
 
 
 
-    public static void addWordSelection(boolean flag, CharSequence charsequence, int i, List list) {
-        //System.out.println("EditorUtils.addWordSelection(flag=" + flag + ", charsequence=" + charsequence + ", i=" + i + ", list=" + list + ")");
+    public static void addWordSelection(boolean flag, CharSequence charsequence, int i, List<TextRange> list) {
+        System.out.println("EditorUtils.addWordSelection(flag=" + flag + ", charsequence=" + charsequence + ", i=" + i + ", list=" + list + ")");
         TextRange textrange = flag ? a(charsequence, i) : null;
         if (textrange != null) {
             list.add(textrange);
@@ -49,7 +49,7 @@ public class EditorUtils {
 
 
     private static TextRange a(CharSequence charsequence, int i) {
-        //System.out.println("EditorUtils.a(charsequence=" + charsequence + ")");
+        System.out.println("EditorUtils.a(charsequence=" + charsequence + ")");
         if ((i > 0)
             &&
             (!Character.isJavaIdentifierPart(charsequence.charAt(i)))
@@ -101,7 +101,7 @@ public class EditorUtils {
 
 
     private static TextRange b(CharSequence charsequence, int i) {
-        //System.out.println("b(charsequence=" + charsequence + ", i=" + i);
+        System.out.println("b(charsequence=" + charsequence + ", i=" + i);
         if (charsequence.length() == 0) {
             return null;
         }
@@ -129,7 +129,7 @@ public class EditorUtils {
 
 
     public static void moveCaretForwardTo(Editor editor, int toOffset, boolean withSelection) {
-        //System.out.println("moveCaretForwardTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
+        System.out.println("moveCaretForwardTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
         CaretModel caretModel = editor.getCaretModel();
         SelectionModel selectionModel = editor.getSelectionModel();
         int caretOffset = caretModel.getOffset();
@@ -166,7 +166,7 @@ public class EditorUtils {
 
 
     public static void moveCaretBackTo(Editor editor, int toOffset, boolean withSelection) {
-        //System.out.println("moveCaretBackTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
+        System.out.println("moveCaretBackTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
         CaretModel caretModel = editor.getCaretModel();
         SelectionModel selectionModel = editor.getSelectionModel();
         int caretOffset = caretModel.getOffset();
@@ -204,19 +204,31 @@ public class EditorUtils {
 
 
     public static TextRange[] findMatchingWordRanges(Editor editor, int rangeStart, int rangeEnd, String selectedWord) {
-        //System.out.println("findMatchingWordRanges(editor=" + editor + ", rangeStart=" + rangeStart + ", rangeEnd=" + rangeEnd + ", selectedWord=" + selectedWord + ")");
-        List result = new ArrayList();
+        List<TextRange> result = new ArrayList<TextRange>();
         String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
+
+        // method 1 - includes instances within other words
+        /*
         int wordLength = selectedWord.length();
         int cursor = 0;
-        while ((cursor >= 0) && (cursor < activeRangeText.length())) {
+        while ((cursor > -1) && (cursor < activeRangeText.length())) {
             cursor = activeRangeText.indexOf(selectedWord, cursor);
             if (cursor > -1) {
                 result.add(new TextRange(cursor + rangeStart, rangeStart + cursor + wordLength));
                 cursor += wordLength;
             }
         }
-        return (TextRange[]) result.toArray(new TextRange[result.size()]);
+        */
+
+        // method 2 - whole words only
+        String activeRangeText2 = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
+        WholeWordIndexFinder wholeWordIndexFinder = new WholeWordIndexFinder(activeRangeText);
+        List<IndexWrapper> results = wholeWordIndexFinder.findIndexesForKeyword(selectedWord);
+        for (IndexWrapper nextIndex : results) {
+            result.add(new TextRange(nextIndex.getStart()+rangeStart, nextIndex.getEnd()+rangeStart));
+        }
+
+        return result.toArray(new TextRange[result.size()]);
     }
 
 

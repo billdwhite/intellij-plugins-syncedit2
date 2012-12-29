@@ -27,10 +27,15 @@
     The mode can be exited by pressing either escape or enter - once to exit SyncEdit on a word, and once again to stop
     SyncEditing a range.  The colours used by the SyncEdit plugin can be customised on the Plugins tab of the editor
     Colors & Fonts settings.<br><br>
+
+    Known Issues:
+    - While syncediting, the delete key does not behave correctly if you are not focused on the initial occurrence of
+    the text being changed.
+    - Some text that should not be selected within the range still gets changed;  not sure how to repeat this issue yet.
     ]]>
     </description>
     <version>2.0</version>
-    <vendor email="billdwhite@gmail.com ">Bill White</vendor>
+    <vendor email="billdwhite@gmail.com">Bill White</vendor>
     <change-notes><![CDATA[
     2.0 - Syncing version to name
     1.0 - Initial version directly built upon SyncEdit originally created by Nathan Brown (abandoned since 2006)

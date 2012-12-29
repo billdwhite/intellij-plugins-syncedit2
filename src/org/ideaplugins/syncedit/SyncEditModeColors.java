@@ -22,10 +22,11 @@ public class SyncEditModeColors {
         "ACTIVE_SYNC_EDIT_RANGE",
         new TextAttributes(null, null, EditorColors.SEARCH_RESULT_ATTRIBUTES.getDefaultAttributes().getBackgroundColor(), EffectType.BOXED, 0));
         */
+    /*
     private static final TextAttributes DEFAULT_ACTIVE_SYNC_EDIT_RANGE_ATTRIBUTES =
         new TextAttributes(Color.cyan,
                            Color.blue,
                            EditorColors.SEARCH_RESULT_ATTRIBUTES.getDefaultAttributes().getBackgroundColor(),
                            EffectType.BOXED,
-                           0);
+                           0);*/
 }

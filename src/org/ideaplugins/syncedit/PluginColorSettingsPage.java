@@ -12,11 +12,10 @@ public abstract interface PluginColorSettingsPage
 extends ColorSettingsPage {
 
 
-    public abstract void registerPluginColorSettings(
-        String paramString1,
-        ColorDescriptor[] paramArrayOfColorDescriptor,
-        AttributesDescriptor[] paramArrayOfAttributesDescriptor,
-        String paramString2);
+    public abstract void registerPluginColorSettings(String paramString1,
+                                                     ColorDescriptor[] paramArrayOfColorDescriptor,
+                                                     AttributesDescriptor[] paramArrayOfAttributesDescriptor,
+                                                     String paramString2);
 
     @NotNull
     public abstract Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap();

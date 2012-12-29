@@ -37,9 +37,7 @@ extends AnAction {
             }
         };
         document.addDocumentListener(documentAdapter);
-
         //System.out.println("SyncEditModePasteAction.actionPerformed()");
-
         try {
             pasteAction.actionPerformed(e);
             SyncEditModeController.enterSyncEditMode(EditorUtils.getEditor(e),

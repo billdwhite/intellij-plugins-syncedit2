@@ -16,9 +16,9 @@ import java.util.Map;
 public class ActionUtils {
 
 
-    private static Map<String, EditorActionHandler> _originalActionHandlers = new HashMap();
-    private static Map<String, AnAction> _originalActions = new HashMap();
-    private static Map<KeyStroke, List<String>> _disabledActionsForKeystrokes = new HashMap();
+    private static Map<String, EditorActionHandler> _originalActionHandlers = new HashMap<String, EditorActionHandler>();
+    private static Map<String, AnAction> _originalActions = new HashMap<String, AnAction>();
+    private static Map<KeyStroke, List<String>> _disabledActionsForKeystrokes = new HashMap<KeyStroke, List<String>>();
 
 
 
@@ -61,15 +61,17 @@ public class ActionUtils {
 
     public static EditorActionHandler getOriginalActionHandler(String actionID) {
         //System.out.println("ActionUtils.getOriginalActionHandler(actionID=" + actionID);
-        return (EditorActionHandler) _originalActionHandlers.get(actionID);
+        return _originalActionHandlers.get(actionID);
     }
 
 
 
+    /*
     public static AnAction getOriginalAction(String actionID) {
         //System.out.println("ActionUtils.getOriginalAction(actionID=" + actionID);
-        return (AnAction) _originalActions.get(actionID);
+        return _originalActions.get(actionID);
     }
+    */
 
 
 
@@ -86,7 +88,7 @@ public class ActionUtils {
     public static boolean restoreOriginalActionHandler(String actionID) {
         //System.out.println("ActionUtils.restoreOriginalActionHandler(actionID=" + actionID);
         EditorActionManager editorActionManager = EditorActionManager.getInstance();
-        EditorActionHandler actionHandler = (EditorActionHandler) _originalActionHandlers.remove(actionID);
+        EditorActionHandler actionHandler = _originalActionHandlers.remove(actionID);
         if (actionHandler != null) {
             editorActionManager.setActionHandler(actionID, actionHandler);
             return true;
@@ -99,7 +101,7 @@ public class ActionUtils {
     public static void restoreOriginalAction(String actionID) {
         //System.out.println("ActionUtils.restoreOriginalAction(actionID=" + actionID);
         ActionManager actionManager = ActionManager.getInstance();
-        AnAction originalAction = (AnAction) _originalActions.remove(actionID);
+        AnAction originalAction = _originalActions.remove(actionID);
         actionManager.unregisterAction(actionID);
         if (originalAction != null) {
             actionManager.registerAction(actionID, originalAction);
@@ -140,7 +142,7 @@ public class ActionUtils {
         //System.out.println("ActionUtils.disableActionsForKeystroke(keyStroke=" + keyStroke + ", excludeActionID=" + excludeActionID);
         KeymapManager keymapManager = KeymapManager.getInstance();
         String[] actionIDs = keymapManager.getActiveKeymap().getActionIds(keyStroke);
-        List actionsDisabled = new ArrayList(actionIDs.length);
+        List<String> actionsDisabled = new ArrayList<String>(actionIDs.length);
         for (String actionID : actionIDs) {
             if ((!actionID.equals(excludeActionID)) && (!isRetainedAction(actionID))) {
                 if (!installActionHandlerOverride(actionID, DISABLED_ACTION_HANDLER)) {
@@ -164,7 +166,7 @@ public class ActionUtils {
 
     public static void enableActionsForKeystroke(KeyStroke keyStroke) {
         //System.out.println("ActionUtils.enableActionsForKeystroke(keyStroke=" + keyStroke);
-        List actionIDs = (List) _disabledActionsForKeystrokes.get(keyStroke);
+        List<String> actionIDs = _disabledActionsForKeystrokes.get(keyStroke);
         if (actionIDs != null) {
             for (Object actionID1 : actionIDs) {
                 String actionID = (String) actionID1;
