@@ -29,15 +29,18 @@
     Colors & Fonts settings.<br>
     ]]>
     </description>
+    <depends>com.intellij.modules.lang</depends>
     <version>2.0.1</version>
     <vendor email="billdwhite@gmail.com">Bill White</vendor>
     <change-notes><![CDATA[
     <ul>
-      <li>2.0.1  - Fixed issue with preventing multiple selections</li>
+      <li>2.0.1  - Fixed issue with preventing multiple selections. Fixed default coloring and default mode keystroke.
+      Updated to work in other JetBrains platforms (AppCode, WebStorm, etc)</li>
     </ul>
     <p>
     <ul>
-      <li>2.0    - Changing version to correspond with name. Now works with multiple project windows open. Refactors whole words only now instead of words and substrings in other words.</li>
+      <li>2.0    - Changing version to correspond with name. Now works with multiple project windows open. Refactors
+      whole words only now instead of words and substrings in other words.</li>
     </ul>
     <p>
     <ul>
@@ -45,7 +48,7 @@
     </ul>
     ]]>
     </change-notes>
-    <idea-version since-build="123.94"/>
+    <idea-version since-build="111.0001" />
     <application-components>
         <component>
             <implementation-class>org.ideaplugins.syncedit.SyncEditApplicationComponent</implementation-class>
@@ -62,7 +65,7 @@
                 text="SyncEdit Mode"
                 description="Activate SyncEdit Mode">
             <keyboard-shortcut keymap="$default"
-                               first-keystroke="ctrl alt R"/>
+                               first-keystroke="meta shift S" />
             <add-to-group group-id="EditorPopupMenu"
                           anchor="after"
                           relative-to-action="RefactoringMenu"/>

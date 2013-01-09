@@ -13,7 +13,7 @@ public class EditorUtils {
 
 
     public static TextRange[] getWordsAtOffset(Editor editor, int offset) {
-        System.out.println("EditorUtils.getWordsAtOffset(editor=" + editor + ", offset=" + offset + ")");
+        //System.out.println("EditorUtils.getWordsAtOffset(editor=" + editor + ", offset=" + offset + ")");
         Document document = editor.getDocument();
         CharSequence charsequence = document.getCharsSequence();
         if (offset == document.getTextLength()) {
@@ -26,7 +26,7 @@ public class EditorUtils {
 
 
     private static TextRange[] getWordSelections(Editor editor, CharSequence charsequence, int offset) {
-        System.out.println("EditorUtils.getWordSelections(editor=" + editor + ", charsequence=" + charsequence + ", offset=" + offset + ")");
+        //System.out.println("EditorUtils.getWordSelections(editor=" + editor + ", charsequence=" + charsequence + ", offset=" + offset + ")");
         ArrayList<TextRange> arraylist = new ArrayList<TextRange>();
         addWordSelection(editor.getSettings().isCamelWords(), charsequence, offset, arraylist);
         return arraylist.toArray(new TextRange[arraylist.size()]);
@@ -35,7 +35,7 @@ public class EditorUtils {
 
 
     public static void addWordSelection(boolean flag, CharSequence charsequence, int i, List<TextRange> list) {
-        System.out.println("EditorUtils.addWordSelection(flag=" + flag + ", charsequence=" + charsequence + ", i=" + i + ", list=" + list + ")");
+        //System.out.println("EditorUtils.addWordSelection(flag=" + flag + ", charsequence=" + charsequence + ", i=" + i + ", list=" + list + ")");
         TextRange textrange = flag ? a(charsequence, i) : null;
         if (textrange != null) {
             list.add(textrange);
@@ -49,7 +49,7 @@ public class EditorUtils {
 
 
     private static TextRange a(CharSequence charsequence, int i) {
-        System.out.println("EditorUtils.a(charsequence=" + charsequence + ")");
+        //System.out.println("EditorUtils.a(charsequence=" + charsequence + ")");
         if ((i > 0)
             &&
             (!Character.isJavaIdentifierPart(charsequence.charAt(i)))
@@ -101,7 +101,7 @@ public class EditorUtils {
 
 
     private static TextRange b(CharSequence charsequence, int i) {
-        System.out.println("b(charsequence=" + charsequence + ", i=" + i);
+        //System.out.println("b(charsequence=" + charsequence + ", i=" + i);
         if (charsequence.length() == 0) {
             return null;
         }
@@ -129,7 +129,7 @@ public class EditorUtils {
 
 
     public static void moveCaretForwardTo(Editor editor, int toOffset, boolean withSelection) {
-        System.out.println("moveCaretForwardTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
+        //System.out.println("moveCaretForwardTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
         CaretModel caretModel = editor.getCaretModel();
         SelectionModel selectionModel = editor.getSelectionModel();
         int caretOffset = caretModel.getOffset();
@@ -166,7 +166,7 @@ public class EditorUtils {
 
 
     public static void moveCaretBackTo(Editor editor, int toOffset, boolean withSelection) {
-        System.out.println("moveCaretBackTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
+        //System.out.println("moveCaretBackTo(editor=" + editor + ", toOffset=" + toOffset + ", withSelection=" + withSelection);
         CaretModel caretModel = editor.getCaretModel();
         SelectionModel selectionModel = editor.getSelectionModel();
         int caretOffset = caretModel.getOffset();

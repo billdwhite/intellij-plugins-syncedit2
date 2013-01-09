@@ -205,25 +205,18 @@ public class SyncEditModeController {
         if ((_activeEditor != null) && (_activeEditor != editor)) {
             leaveSyncEditMode();
         }
-        _activeEditor = editor;
-        try {
-            /*
-            Color effectColor = EditorColors.SEARCH_RESULT_ATTRIBUTES.getDefaultAttributes().getBackgroundColor();
-            if (effectColor == null) {
-                effectColor = Color.magenta;
-            }
-            */
-            TextAttributes rangeAttributes = editor.getColorsScheme().getAttributes(SyncEditModeColors.ACTIVE_SYNC_EDIT_RANGE_ATTRIBUTES);
 
+        _activeEditor = editor;
+
+        try {
+            TextAttributes rangeAttributes = editor.getColorsScheme().getAttributes(SyncEditModeColors.ACTIVE_SYNC_EDIT_RANGE_ATTRIBUTES);
             _activeRangeBoxHighlighter = _activeEditor.getMarkupModel().addRangeHighlighter(rangeStart,
                                                                                             rangeEnd,
                                                                                             5997,
                                                                                             rangeAttributes,
                                                                                             HighlighterTargetArea.EXACT_RANGE);
-
             _activeRangeBoxHighlighter.setGreedyToLeft(true);
             _activeRangeBoxHighlighter.setGreedyToRight(true);
-
             _activeEditor.getDocument().addDocumentListener(_documentListener);
             installEditorActionHandlers();
         }

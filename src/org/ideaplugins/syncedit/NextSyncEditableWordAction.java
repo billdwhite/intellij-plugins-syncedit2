@@ -17,6 +17,5 @@ extends SelectSyncEditableWordAction {
                 }
             }
         });
-        //System.out.println("NextSyncEditableWordAction constructor()");
     }
 }

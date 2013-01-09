@@ -11,14 +11,12 @@ extends EditorAction {
 
     protected SelectSyncEditableWordAction(EditorActionHandler editorActionHandler) {
         super(editorActionHandler);
-        //System.out.println("SelectSyncEditableWordAction constructor()");
     }
 
 
 
     public void update(AnActionEvent anActionEvent) {
         super.update(anActionEvent);
-        //System.out.println("SelectSyncEditableWordAction update()");
         Editor editor = EditorUtils.getEditor(anActionEvent);
         anActionEvent.getPresentation().setEnabled((anActionEvent.getPresentation().isEnabled())
                                                    &&
