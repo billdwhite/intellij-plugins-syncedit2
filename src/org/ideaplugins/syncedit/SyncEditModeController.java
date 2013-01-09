@@ -87,9 +87,11 @@ public class SyncEditModeController {
         public void execute(Editor editor, DataContext dataContext) {
             //System.out.println("_homeHandler execute()");
             if (SyncEditModeController._activeEditor == editor) {
-                if ((editor.getCaretModel().getOffset() > SyncEditModeController._selectedWordBoxHighlight.getStartOffset())
+                if (
+                (editor.getCaretModel().getOffset() >  SyncEditModeController._selectedWordBoxHighlight.getStartOffset())
                 &&
-                (editor.getCaretModel().getOffset() <= SyncEditModeController._selectedWordBoxHighlight.getEndOffset())) {
+                (editor.getCaretModel().getOffset() <= SyncEditModeController._selectedWordBoxHighlight.getEndOffset())
+                ) {
                     EditorUtils.moveCaretBackTo(editor,
                                                 SyncEditModeController._selectedWordBoxHighlight.getStartOffset(),
                                                 false);
@@ -582,6 +584,7 @@ public class SyncEditModeController {
 
 
     public static void clearSyncEditSelection() {
+        //System.out.println("SyncEditModeController.clearSyncEditSelection()");
         if (_hasSyncEditSelection) {
             _hasSyncEditSelection = false;
             restoreSelectionActionHandlers();

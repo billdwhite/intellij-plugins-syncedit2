@@ -21,7 +21,7 @@ implements IntentionAction {
                 ||
                 (editor.getCaretModel().getOffset() > SyncEditModeController.getActiveRangeBoxHighlighter().getEndOffset())) {
                 if (editor.getSelectionModel().hasSelection()) {
-                    //SyncEditModeController.leaveSyncEditMode();
+                    SyncEditModeController.leaveSyncEditMode();
                     SyncEditModeController.enterSyncEditMode(editor);
                 }
             }

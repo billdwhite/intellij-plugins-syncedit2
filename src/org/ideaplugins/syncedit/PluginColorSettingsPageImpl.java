@@ -50,7 +50,7 @@ public class PluginColorSettingsPageImpl
 
     @Nullable
     public Icon getIcon() {
-        return new ImageIcon(getClass().getResource("/org/ideaplugins/syncedit/plugincolors.png"));
+        return new ImageIcon(getClass().getResource("/org/ideaplugins/syncedit/resources/plugincolors.png"));
     }
 
 
