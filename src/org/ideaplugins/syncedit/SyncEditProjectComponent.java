@@ -4,6 +4,8 @@ import com.intellij.codeInsight.intention.IntentionManager;
 import com.intellij.openapi.components.ProjectComponent;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 public class SyncEditProjectComponent
 implements ProjectComponent {
 

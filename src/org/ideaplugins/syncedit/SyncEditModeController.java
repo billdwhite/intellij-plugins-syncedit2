@@ -240,7 +240,7 @@ public class SyncEditModeController {
 
     public static boolean isInSyncEditMode(Editor editor) {
         //System.out.println("SyncEditModeController.isInSyncEditMode()");
-        return _activeEditor == editor;
+        return _activeEditor != null && _activeEditor == editor;
     }
 
 

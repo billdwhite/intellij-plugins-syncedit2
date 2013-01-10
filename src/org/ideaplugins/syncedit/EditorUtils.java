@@ -205,10 +205,11 @@ public class EditorUtils {
 
     public static TextRange[] findMatchingWordRanges(Editor editor, int rangeStart, int rangeEnd, String selectedWord) {
         List<TextRange> result = new ArrayList<TextRange>();
-        String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
 
         // method 1 - includes instances within other words
         /*
+        List<TextRange> result = new ArrayList<TextRange>();
+        String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
         int wordLength = selectedWord.length();
         int cursor = 0;
         while ((cursor > -1) && (cursor < activeRangeText.length())) {
@@ -221,10 +222,18 @@ public class EditorUtils {
         */
 
         // method 2 - whole words only
-        WholeWordIndexFinder wholeWordIndexFinder = new WholeWordIndexFinder(activeRangeText);
-        List<IndexWrapper> results = wholeWordIndexFinder.findIndexesForKeyword(selectedWord);
-        for (IndexWrapper nextIndex : results) {
-            result.add(new TextRange(nextIndex.getStart()+rangeStart, nextIndex.getEnd()+rangeStart));
+        if (!selectedWord.contains(" ")) {
+            try {
+                String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
+                WholeWordIndexFinder wholeWordIndexFinder = new WholeWordIndexFinder(activeRangeText);
+                List<IndexWrapper> results = wholeWordIndexFinder.findIndexesForKeyword(selectedWord);
+                for (IndexWrapper nextIndex : results) {
+                    result.add(new TextRange(nextIndex.getStart()+rangeStart, nextIndex.getEnd()+rangeStart));
+                }
+            }
+            catch (Exception e) {
+                System.out.println("SyncEdit could not handle selection: " + e.getMessage());
+            }
         }
 
         return result.toArray(new TextRange[result.size()]);

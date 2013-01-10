@@ -24,6 +24,9 @@ implements IntentionAction {
                     SyncEditModeController.leaveSyncEditMode();
                     SyncEditModeController.enterSyncEditMode(editor);
                 }
+                else {
+                    SyncEditModeController.leaveSyncEditMode();
+                }
             }
             else {
                 SyncEditModeController.activateSyncEditSelectionForCaretLocation(editor);
@@ -35,18 +38,18 @@ implements IntentionAction {
     }
 
 
+
     public void update(AnActionEvent e) {
         super.update(e);
-        //System.out.println("SyncEditModeAction update()");
-        boolean enable = true;
+        boolean syncEditAvailable = true;
         Editor editor = EditorUtils.getEditor(e);
         if (!SyncEditModeController.isInSyncEditMode(editor)) {
-            //SyncEditModeController.leaveSyncEditMode();
+            SyncEditModeController.leaveSyncEditMode();
             if ((editor == null) || (!editor.getSelectionModel().hasSelection())) {
-                enable = false;
+                syncEditAvailable = false;
             }
         }
-        e.getPresentation().setEnabled(enable);
+        e.getPresentation().setEnabled(syncEditAvailable);
     }
 
 

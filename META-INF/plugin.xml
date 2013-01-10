@@ -35,6 +35,7 @@
     <change-notes><![CDATA[
     <ul>
       <li>2.0.1  - Fixed issue with preventing multiple selections. Fixed default coloring and default mode keystroke.
+      Fixed errors for unusable selections. Reactivating syncedit outside selection now toggles off syncedit mode.
       Updated to work in other JetBrains platforms (AppCode, WebStorm, etc)</li>
     </ul>
     <p>
@@ -63,9 +64,10 @@
         <action id="SyncEditModeAction"
                 class="org.ideaplugins.syncedit.SyncEditModeAction"
                 text="SyncEdit Mode"
-                description="Activate SyncEdit Mode">
+                description="Activate SyncEdit Mode"
+                icon="/org/ideaplugins/syncedit/resources/syncedit.png">
             <keyboard-shortcut keymap="$default"
-                               first-keystroke="meta shift S" />
+                               first-keystroke="meta S" />
             <add-to-group group-id="EditorPopupMenu"
                           anchor="after"
                           relative-to-action="RefactoringMenu"/>
