@@ -1,19 +1,25 @@
 <idea-plugin>
     <name>SyncEdit 2</name>
     <description><![CDATA[
-    This is version 2 of the original SyncEdit plugin created by Nathan Brown.  It has not been updated since 2006 and has
-    not worked cleanly since IntelliJ IDEA version 9. I have attempted to manually patch it and get it working again.  I hope
-    to add additional features and functionality but for now it is just an updated release of the original code.  The first
-    version had no published license and attempts at contacting the auther were unsuccessful so I have simply updated
-    the freely available version and am releasing it as an open source version 2.
+    SyncEdit allows you to refactor words in your code in a more flexible manner than that found in the default editor.
+    The user first highlights a range of code, then selects any word within that range and begins editing.  All other
+    occurrences of that word within the selection will simultaneously update.  Whereas the default rename refactoring
+    works against only recognized variables, SyncEdit works against any word, regardless of it usage.  SyncEdit can
+    do things like change the visibility of several methods at once from public to private or easily comment out
+    multiple System.out.println statements across multiple methods as long as they are included in the selection.
 
-    This plugin allows you to do an inplace synchronized edit of all instances of a string within a defined range.<br><br>
+    This is version 2 of the original SyncEdit plugin created by Nathan Brown.  It has not been updated since 2006 and has
+    not worked cleanly since IntelliJ IDEA version 9. I have to patched it and I hope to add additional functionality but
+    for now it is mostly an updated release of the original code.  The first version had no published license and attempts
+    at contacting the author were unsuccessful so I have simply updated the freely available version and am releasing it
+    as an open source plugin.<br><br>
 
     A "SyncEdit Mode" menu item is added to the Search and Editor Popup menus.  Simply select a range to be edited,
     enter "SyncEdit Mode" and all words in the marked range become 'live' - any changes to an instance of a word changes
     all matching strings in real-time.<br><br>
 
-    When in SyncEdit mode, pressing TAB/Ctrl+TAB will take you forward to the next/previous SyncEditable word found, respectively.<br><br>
+    When in SyncEdit mode, pressing TAB/Ctrl+TAB will take you forward to the next/previous SyncEditable word found,
+    respectively.<br><br>
 
     The decision about the word to SyncEdit is determined by a 'Select Word' type operation at the current cursor location
     (respecting any CamelHump settings) when a modification is made. However, you can SyncEdit a custom region of text by
@@ -25,7 +31,7 @@
     are used in.<br><br>
 
     The mode can be exited by pressing either escape or enter - once to exit SyncEdit on a word, and once again to stop
-    SyncEditing a range.  The colours used by the SyncEdit plugin can be customised on the Plugins tab of the editor
+    SyncEditing a range.  The colors used by the SyncEdit plugin can be customised on the Plugins tab of the editor
     Colors & Fonts settings.<br>
     ]]>
     </description>
