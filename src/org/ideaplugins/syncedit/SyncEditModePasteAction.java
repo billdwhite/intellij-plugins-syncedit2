@@ -3,6 +3,7 @@ package org.ideaplugins.syncedit;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -10,6 +11,7 @@ import com.intellij.openapi.editor.event.DocumentEvent;
 public class SyncEditModePasteAction
 extends AnAction {
 
+    private static final Logger LOG = Logger.getInstance(SyncEditModePasteAction.class.toString());
 
     public void update(AnActionEvent e) {
         AnAction pasteAction = ActionManager.getInstance().getAction("$Paste");
@@ -25,6 +27,7 @@ extends AnAction {
 
 
     public void actionPerformed(AnActionEvent e) {
+        LOG.info("SyncEditModePasteAction.actionPerformed()");
         SyncEditModeController.leaveSyncEditMode();
         AnAction pasteAction = ActionManager.getInstance().getAction("$Paste");
         Document document = EditorUtils.getEditor(e).getDocument();

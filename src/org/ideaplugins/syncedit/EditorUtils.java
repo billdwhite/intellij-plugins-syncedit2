@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.util.TextRange;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,33 +207,33 @@ public class EditorUtils {
     public static TextRange[] findMatchingWordRanges(Editor editor, int rangeStart, int rangeEnd, String selectedWord) {
         List<TextRange> result = new ArrayList<TextRange>();
 
-        // method 1 - includes instances within other words
-        /*
-        List<TextRange> result = new ArrayList<TextRange>();
-        String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
-        int wordLength = selectedWord.length();
-        int cursor = 0;
-        while ((cursor > -1) && (cursor < activeRangeText.length())) {
-            cursor = activeRangeText.indexOf(selectedWord, cursor);
-            if (cursor > -1) {
-                result.add(new TextRange(cursor + rangeStart, rangeStart + cursor + wordLength));
-                cursor += wordLength;
-            }
-        }
-        */
-
-        // method 2 - whole words only
-        if (!selectedWord.contains(" ")) {
-            try {
-                String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
-                WholeWordIndexFinder wholeWordIndexFinder = new WholeWordIndexFinder(activeRangeText);
-                List<IndexWrapper> results = wholeWordIndexFinder.findIndexesForKeyword(selectedWord);
-                for (IndexWrapper nextIndex : results) {
-                    result.add(new TextRange(nextIndex.getStart()+rangeStart, nextIndex.getEnd()+rangeStart));
+        if (Configuration.getInstance().isWholeWordSelectionEnabled()) {
+            // whole words only
+            if (!selectedWord.contains(" ")) {
+                try {
+                    String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
+                    WholeWordIndexFinder wholeWordIndexFinder = new WholeWordIndexFinder(activeRangeText);
+                    List<IndexWrapper> results = wholeWordIndexFinder.findIndexesForKeyword(selectedWord);
+                    for (IndexWrapper nextIndex : results) {
+                        result.add(new TextRange(nextIndex.getStart()+rangeStart, nextIndex.getEnd()+rangeStart));
+                    }
+                }
+                catch (Exception e) {
+                    System.out.println("SyncEdit could not handle selection: " + e.getMessage());
                 }
             }
-            catch (Exception e) {
-                System.out.println("SyncEdit could not handle selection: " + e.getMessage());
+        }
+        else {
+            // method 1 - includes instances within other words
+            String activeRangeText = editor.getDocument().getCharsSequence().subSequence(rangeStart, rangeEnd).toString();
+            int wordLength = selectedWord.length();
+            int cursor = 0;
+            while ((cursor > -1) && (cursor < activeRangeText.length())) {
+                cursor = activeRangeText.indexOf(selectedWord, cursor);
+                if (cursor > -1) {
+                    result.add(new TextRange(cursor + rangeStart, rangeStart + cursor + wordLength));
+                    cursor += wordLength;
+                }
             }
         }
 

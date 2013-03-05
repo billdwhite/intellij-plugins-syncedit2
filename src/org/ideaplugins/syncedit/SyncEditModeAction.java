@@ -3,6 +3,7 @@ package org.ideaplugins.syncedit;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -13,9 +14,10 @@ public class SyncEditModeAction
 extends AnAction
 implements IntentionAction {
 
+    private static final Logger LOG = Logger.getInstance(SyncEditModeAction.class.toString());
 
     public static void executeForEditor(Editor editor) {
-        //System.out.println("SyncEditModeAction executeForEditor()");
+        //LOG.info("SyncEditModeAction.executeForEditor()" + editor);
         if (SyncEditModeController.isInSyncEditMode(editor)) {
             if ((editor.getCaretModel().getOffset() < SyncEditModeController.getActiveRangeBoxHighlighter().getStartOffset())
                 ||
@@ -39,12 +41,24 @@ implements IntentionAction {
 
 
 
+    /**
+     * Called by menu items, toolbars, etc to see if they should be enabled for syncedit action
+     * @param e
+     */
     public void update(AnActionEvent e) {
         super.update(e);
-        boolean syncEditAvailable = true;
+        boolean syncEditAvailable = Configuration.getInstance().isPluginEnabled();
         Editor editor = EditorUtils.getEditor(e);
         if (!SyncEditModeController.isInSyncEditMode(editor)) {
-            SyncEditModeController.leaveSyncEditMode();
+
+            /* The toolbar icon will generate update() calls from every open window which will immediately close a syncedit in one editor when the toolbar from
+            another editor window makes an update call to see if that button should be enabled/disabled. Checking to see if the active editor's project matches
+            the ActionEvent's project will avoid this problem. */
+            if (SyncEditModeController.getActiveEditor() != null &&
+                e.getProject() == SyncEditModeController.getActiveEditor().getProject()) {
+                SyncEditModeController.leaveSyncEditMode();
+            }
+
             if ((editor == null) || (!editor.getSelectionModel().hasSelection())) {
                 syncEditAvailable = false;
             }
@@ -55,9 +69,10 @@ implements IntentionAction {
 
 
     public void actionPerformed(AnActionEvent e) {
-        //System.out.println("SyncEditModeAction actionPerformed()");
-        Editor editor = EditorUtils.getEditor(e);
-        executeForEditor(editor);
+        if (Configuration.getInstance().isPluginEnabled()) {
+            Editor editor = EditorUtils.getEditor(e);
+            executeForEditor(editor);
+        }
     }
 
 
@@ -77,7 +92,9 @@ implements IntentionAction {
 
 
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return (editor.getSelectionModel().hasSelection()) && (!SyncEditModeController.isInSyncEditMode());
+        return Configuration.getInstance().isPluginEnabled() &&
+               editor.getSelectionModel().hasSelection() &&
+               !SyncEditModeController.isInSyncEditMode();
     }
 
 

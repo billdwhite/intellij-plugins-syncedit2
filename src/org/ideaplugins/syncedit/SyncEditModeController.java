@@ -2,6 +2,7 @@ package org.ideaplugins.syncedit;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.command.undo.UndoManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
@@ -24,8 +25,8 @@ import java.util.List;
 public class SyncEditModeController {
 
 
-    //private static final String ACTION_EDITOR_MOVE_LINE_START_WITH_SELECTION = "EditorLineStartWithSelection";
-    //private static final String ACTION_EDITOR_MOVE_LINE_END_WITH_SELECTION = "EditorLineEndWithSelection";
+    private static final Logger LOG = Logger.getInstance(SyncEditModeController.class.toString());
+
     private static boolean _hasSyncEditSelection;
     private static RangeHighlighter _selectedWordBoxHighlight;
     private static RangeHighlighter _selectedWordColorHighlight;
@@ -41,11 +42,11 @@ public class SyncEditModeController {
 
     private static DocumentAdapter _documentListener = new DocumentAdapter() {
         public void beforeDocumentChange(DocumentEvent e) {
-            //System.out.println("DocumentAdapter beforeDocumentChange()");
+            //LOG.info("DocumentAdapter beforeDocumentChange()");
             SyncEditModeController.beforeActiveEditorDocumentChange(e);
         }
         public void documentChanged(DocumentEvent e) {
-            //System.out.println("DocumentAdapter documentChanged()");
+            //LOG.info("DocumentAdapter documentChanged()");
             SyncEditModeController.activeEditorDocumentChange(e);
         }
     };
@@ -53,7 +54,7 @@ public class SyncEditModeController {
 
     private static EditorActionHandler _escapeHandler = new EditorActionHandler() {
         public void execute(Editor editor, DataContext dataContext) {
-            //System.out.println("_escapeHandler execute()");
+            //LOG.info("_escapeHandler execute()");
             if (SyncEditModeController._activeEditor != null) {
                 if (SyncEditModeController._activeEditor == editor) {
                     SyncEditModeController.doEscape();
@@ -69,7 +70,7 @@ public class SyncEditModeController {
 
     private static EditorActionHandler _enterHandler = new EditorActionHandler() {
         public void execute(Editor editor, DataContext dataContext) {
-            //System.out.println("_enterHandler execute()");
+            //LOG.info("_enterHandler execute()");
             if (SyncEditModeController._activeEditor != null) {
                 if (SyncEditModeController._activeEditor == editor) {
                     SyncEditModeController.doEscape();
@@ -85,7 +86,7 @@ public class SyncEditModeController {
 
     private static EditorActionHandler _homeHandler = new EditorActionHandler() {
         public void execute(Editor editor, DataContext dataContext) {
-            //System.out.println("_homeHandler execute()");
+            //LOG.info("_homeHandler execute()");
             if (SyncEditModeController._activeEditor == editor) {
                 if (
                 (editor.getCaretModel().getOffset() >  SyncEditModeController._selectedWordBoxHighlight.getStartOffset())
@@ -110,7 +111,7 @@ public class SyncEditModeController {
 
     private static EditorActionHandler _homeWithSelectionHandler = new EditorActionHandler() {
         public void execute(Editor editor, DataContext dataContext) {
-            //System.out.println("_homeWithSelectionHandler execute()");
+            //LOG.info("_homeWithSelectionHandler execute()");
             if (SyncEditModeController._activeEditor == editor) {
                 if ((editor.getCaretModel().getOffset() > SyncEditModeController._selectedWordBoxHighlight.getStartOffset())
                 &&
@@ -133,7 +134,7 @@ public class SyncEditModeController {
 
     private static EditorActionHandler _endHandler = new EditorActionHandler() {
         public void execute(Editor editor, DataContext dataContext) {
-            //System.out.println("_endHandler execute()");
+            //LOG.info("_endHandler execute()");
             if (SyncEditModeController._activeEditor == editor) {
                 if ((editor.getCaretModel().getOffset() < SyncEditModeController._selectedWordBoxHighlight.getEndOffset())
                 &&
@@ -156,7 +157,7 @@ public class SyncEditModeController {
 
     private static EditorActionHandler _endWithSelectionHandler = new EditorActionHandler() {
         public void execute(Editor editor, DataContext dataContext) {
-            //System.out.println("_endWithSelectionHandler execute()");
+            //LOG.info("_endWithSelectionHandler execute()");
             if (SyncEditModeController._activeEditor == editor) {
                 if ((editor.getCaretModel().getOffset() < SyncEditModeController._selectedWordBoxHighlight.getEndOffset())
                 &&
@@ -178,8 +179,8 @@ public class SyncEditModeController {
 
 
 
-    static void enterSyncEditMode(Editor editor) {
-        //System.out.println("enterSyncEditMode(editor=" + editor + ")");
+    public static void enterSyncEditMode(Editor editor) {
+        //LOG.info("SyncEditModeController.enterSyncEditMode(editor=" + editor + ")");
         if (editor != null) {
             SelectionModel selectionModel = editor.getSelectionModel();
             if (selectionModel.hasSelection()) {
@@ -201,7 +202,7 @@ public class SyncEditModeController {
 
 
     public static void enterSyncEditMode(Editor editor, int rangeStart, int rangeEnd) {
-        //System.out.println("enterSyncEditMode(editor=" + editor + ", rangeStart=" + rangeStart + ", rangeEnd=" + rangeEnd + ")");
+        //LOG.info("SyncEditModeController.enterSyncEditMode(editor=" + editor + ", rangeStart=" + rangeStart + ", rangeEnd = " + rangeEnd + ")");
         if ((_activeEditor != null) && (_activeEditor != editor)) {
             leaveSyncEditMode();
         }
@@ -219,6 +220,7 @@ public class SyncEditModeController {
             _activeRangeBoxHighlighter.setGreedyToRight(true);
             _activeEditor.getDocument().addDocumentListener(_documentListener);
             installEditorActionHandlers();
+            //LOG.info("SyncEditModeController.enterSyncEditMode() - 2");
         }
         catch (RuntimeException e) {
             leaveSyncEditMode();
@@ -229,7 +231,7 @@ public class SyncEditModeController {
 
 
     private static void installEditorActionHandlers() {
-        //System.out.println("SyncEditModeController.installEditorActionHandlers()");
+        //LOG.info("SyncEditModeController.installEditorActionHandlers()");
         ActionUtils.installActionHandlerOverride("EditorEscape", _escapeHandler);
         ActionUtils.installActionHandlerOverride("EditorEnter", _enterHandler);
         ActionUtils.disableOtherActionsOnSameKeystrokes("NextSyncEditableWordAction");
@@ -239,8 +241,7 @@ public class SyncEditModeController {
 
 
     public static boolean isInSyncEditMode(Editor editor) {
-        //System.out.println("SyncEditModeController.isInSyncEditMode()");
-        return _activeEditor != null && _activeEditor == editor;
+        return (_activeEditor != null && _activeEditor == editor);
     }
 
 
@@ -258,7 +259,7 @@ public class SyncEditModeController {
 
 
     public static void leaveSyncEditMode() {
-        //System.out.println("SyncEditModeController.leaveSyncEditMode()");
+        //LOG.info("SyncEditModeController.leaveSyncEditMode()");
         if (_activeEditor != null) {
             try {
                 clearSyncEditSelection();
@@ -283,7 +284,7 @@ public class SyncEditModeController {
 
 
     private static void restoreEditorActionHandlers() {
-        //System.out.println("SyncEditModeController.restoreEditorActionHandlers()");
+        //LOG.info("SyncEditModeController.restoreEditorActionHandlers()");
         ActionUtils.restoreOriginalActionHandler("EditorEscape");
         ActionUtils.restoreOriginalActionHandler("EditorEnter");
         ActionUtils.enableOtherActionsOnSameKeystrokes("NextSyncEditableWordAction");
@@ -293,14 +294,14 @@ public class SyncEditModeController {
 
 
     public static RangeHighlighter getActiveRangeBoxHighlighter() {
-        //System.out.println("SyncEditModeController.getActiveRangeBoxHighlighter()");
+        //LOG.info("SyncEditModeController.getActiveRangeBoxHighlighter()");
         return _activeRangeBoxHighlighter;
     }
 
 
 
     private static void beforeActiveEditorDocumentChange(DocumentEvent e) {
-        //System.out.println("SyncEditModeController.beforeActiveEditorDocumentChange()");
+        //LOG.info("SyncEditModeController.beforeActiveEditorDocumentChange()");
         UndoManager undoManager = UndoManager.getInstance(_activeEditor.getProject());
         if ((!_modifyingDocument) && (!undoManager.isUndoInProgress()) && (!undoManager.isRedoInProgress())) {
             int blockStart = e.getOffset();
@@ -347,7 +348,7 @@ public class SyncEditModeController {
 
 
     public static void activateSyncEditSelectionForCaretLocation(Editor editor) {
-        //System.out.println("SyncEditModeController.activateSyncEditSelectionForCaretLocation()");
+        //LOG.info("SyncEditModeController.activateSyncEditSelectionForCaretLocation()");
         Fragment fragment = getSyncEditFragmentAtCaret(editor);
         activateSyncEditSelection(editor, fragment.getText(), fragment.getStart(), fragment.getEnd());
     }
@@ -355,7 +356,7 @@ public class SyncEditModeController {
 
 
     private static Fragment getSyncEditFragmentAtCaret(Editor editor) {
-        //System.out.println("SyncEditModeController.getSyncEditFragmentAtCaret()");
+        //LOG.info("SyncEditModeController.getSyncEditFragmentAtCaret()");
         SelectionModel selectionModel = editor.getSelectionModel();
         if (selectionModel.hasSelection()) {
             return getFragmentForSelection(editor);
@@ -385,7 +386,7 @@ public class SyncEditModeController {
 
 
     private static Fragment getFragmentForSelection(Editor editor) {
-        //System.out.println("SyncEditModeController.getFragmentForSelection()");
+        //LOG.info("SyncEditModeController.getFragmentForSelection()");
         Fragment fragment = new Fragment();
         SelectionModel selectionModel = editor.getSelectionModel();
         if (selectionModel.hasSelection()) {
@@ -408,7 +409,7 @@ public class SyncEditModeController {
 
 
     private static boolean activateSyncEditSelection(Editor editor, String selectedWord, int syncEditStart, int syncEditEnd) {
-        //System.out.println("SyncEditModeController.activateSyncEditSelection()");
+        //LOG.info("SyncEditModeController.activateSyncEditSelection()");
         RangeHighlighter rangeHighlighter = getActiveRangeBoxHighlighter();
         int rangeStart = rangeHighlighter.getStartOffset();
         int rangeEnd = rangeHighlighter.getEndOffset();
@@ -429,7 +430,7 @@ public class SyncEditModeController {
 
 
     private static void activateSyncEditSelection(Editor editor, int wordStart, int wordEnd, TextRange[] matchingWordRanges) {
-        //System.out.println("SyncEditModeController.activateSyncEditSelection()");
+        //LOG.info("SyncEditModeController.activateSyncEditSelection()");
         if (_hasSyncEditSelection) {
             clearSyncEditSelection();
         }
@@ -455,7 +456,7 @@ public class SyncEditModeController {
 
 
     private static void installSelectionActionHandlers() {
-        //System.out.println("SyncEditModeController.installSelectionActionHandlers()");
+        //LOG.info("SyncEditModeController.installSelectionActionHandlers()");
         ActionUtils.installActionHandlerOverride("EditorLineStart", _homeHandler);
         ActionUtils.installActionHandlerOverride("EditorLineStartWithSelection", _homeWithSelectionHandler);
         ActionUtils.installActionHandlerOverride("EditorLineEnd", _endHandler);
@@ -465,7 +466,7 @@ public class SyncEditModeController {
 
 
     static void highlightMatchingWordInstances(Editor editor, TextRange[] matchingWordRanges, int selectedWordPosition) {
-        //System.out.println("SyncEditModeController.highlightMatchingWordInstances(editor=" + editor + ", matchingWordRanges=" + matchingWordRanges + ", selectedWordPosition=" + selectedWordPosition + ")");
+        //LOG.info("SyncEditModeController.highlightMatchingWordInstances(editor=" + editor + ", matchingWordRanges=" + matchingWordRanges + ", selectedWordPosition=" + selectedWordPosition + ")");
         for (TextRange matchingWordRange : matchingWordRanges) {
             TextAttributes textAttributes = EditorColors.SEARCH_RESULT_ATTRIBUTES.getDefaultAttributes();
             int startOffset = matchingWordRange.getStartOffset();
@@ -489,7 +490,7 @@ public class SyncEditModeController {
 
 
     private static void activeEditorDocumentChange(DocumentEvent e) {
-        //System.out.println("SyncEditModeController.activeEditorDocumentChange()");
+        //LOG.info("SyncEditModeController.activeEditorDocumentChange()");
         UndoManager undoManager = UndoManager.getInstance(_activeEditor.getProject());
         if ((!_modifyingDocument)
             &&
@@ -510,7 +511,7 @@ public class SyncEditModeController {
 
 
     private static void handleSyncEdit(DocumentEvent e) {
-        //System.out.println("SyncEditModeController.handleSyncEdit(DocumentEvent=" + e + ")");
+        //LOG.info("SyncEditModeController.handleSyncEdit(DocumentEvent=" + e + ")");
         _modifyingDocument = true;
         try {
             int caretOffset = _activeEditor.getCaretModel().getOffset();
@@ -565,7 +566,7 @@ public class SyncEditModeController {
 
 
     private static void doEscape() {
-        //System.out.println("SyncEditModeController.doEscape()");
+        //LOG.info("SyncEditModeController.doEscape()");
         if (_hasSyncEditSelection) {
             clearSyncEditSelection();
         }
@@ -577,7 +578,7 @@ public class SyncEditModeController {
 
 
     public static void clearSyncEditSelection() {
-        //System.out.println("SyncEditModeController.clearSyncEditSelection()");
+        //LOG.info("SyncEditModeController.clearSyncEditSelection()");
         if (_hasSyncEditSelection) {
             _hasSyncEditSelection = false;
             restoreSelectionActionHandlers();
@@ -676,7 +677,7 @@ public class SyncEditModeController {
 
 
     public static void selectRepeatedWord(Editor editor, Word wordToSelect) {
-        //System.out.println("SyncEditModeController.selectRepeatedWord(editor=" + editor + " , wordToSelect=" + wordToSelect + ")");
+        //LOG.info("SyncEditModeController.selectRepeatedWord(editor=" + editor + " , wordToSelect=" + wordToSelect + ")");
         TextRange firstInstanceRange = wordToSelect.getFirstInstanceRange();
         TextRange[] subsequentRanges = wordToSelect.getSubsequentInstanceRanges();
         TextRange[] allInstanceRanges = new TextRange[subsequentRanges.length + 1];
@@ -717,7 +718,7 @@ public class SyncEditModeController {
 
 
     private static void addWord(TextRange wordRange) {
-        //System.out.println("SyncEditModeController.addWord(wordRange=" + wordRange +  ", isWordPart=" + isWordPart + ")");
+        //LOG.info("SyncEditModeController.addWord(wordRange=" + wordRange +  ")");
         String wordText =
             _activeEditor.getDocument().getCharsSequence().subSequence(wordRange.getStartOffset(), wordRange.getEndOffset()).toString();
         if (shouldFindCompoundWords()) {

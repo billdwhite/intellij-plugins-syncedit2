@@ -1,6 +1,6 @@
 <idea-plugin>
-    <name>SyncEdit 2</name>
-    <description><![CDATA[
+  <name>SyncEdit 2</name>
+  <description><![CDATA[
     SyncEdit allows you to refactor words in your code in a more flexible manner than that found in the default editor.
     The user first highlights a range of code, then selects any word within that range and begins editing.  All other
     occurrences of that word within the selection will simultaneously update.  Whereas the default rename refactoring
@@ -34,83 +34,91 @@
     SyncEditing a range.  The colors used by the SyncEdit plugin can be customised on the Plugins tab of the editor
     Colors & Fonts settings.<br>
     ]]>
-    </description>
-    <depends>com.intellij.modules.lang</depends>
-    <version>2.0.1</version>
-    <vendor email="billdwhite@gmail.com">Bill White</vendor>
-    <change-notes><![CDATA[
+  </description>
+  <depends>com.intellij.modules.lang</depends>
+  <version>2.0.2</version>
+  <vendor email="billdwhite@gmail.com">Bill White</vendor>
+  <change-notes><![CDATA[
     <ul>
-      <li>2.0.1  - Fixed issue with preventing multiple selections. Fixed default coloring and default mode keystroke.
+      <li>2.0.2 - Added settings panel with option to enabled/disable syncedit feature and to switch between using
+      global/word selection. Fixed bug with where syncedit would not stay active if multiple intellij windows were
+      open at the same time.
+    </ul>
+    <ul>
+      <li>2.0.1 - Fixed issue with preventing multiple selections. Fixed default coloring and default mode keystroke.
       Fixed errors for unusable selections. Reactivating syncedit outside selection now toggles off syncedit mode.
       Updated to work in other JetBrains platforms (AppCode, WebStorm, etc)</li>
     </ul>
     <p>
     <ul>
-      <li>2.0    - Changing version to correspond with name. Now works with multiple project windows open. Refactors
+      <li>2.0.0 - Changing version to correspond with name. Now works with multiple project windows open. Refactors
       whole words only now instead of words and substrings in other words.</li>
     </ul>
     <p>
     <ul>
-      <li>1.0    - Initial version directly built upon SyncEdit originally created by Nathan Brown (last updated 2006)</li>
+      <li>1.0.0 - Initial version directly built upon SyncEdit originally created by Nathan Brown (last updated 2006)</li>
     </ul>
     ]]>
-    </change-notes>
-    <idea-version since-build="111.0001" />
-    <application-components>
-        <component>
-            <implementation-class>org.ideaplugins.syncedit.SyncEditApplicationComponent</implementation-class>
-        </component>
-    </application-components>
-    <project-components>
-        <component>
-            <implementation-class>org.ideaplugins.syncedit.SyncEditProjectComponent</implementation-class>
-        </component>
-    </project-components>
-    <actions>
-        <action id="SyncEditModeAction"
-                class="org.ideaplugins.syncedit.SyncEditModeAction"
-                text="SyncEdit Mode"
-                description="Activate SyncEdit Mode"
-                icon="/org/ideaplugins/syncedit/resources/syncedit.png">
-            <keyboard-shortcut keymap="$default"
-                               first-keystroke="meta S" />
-            <add-to-group group-id="EditorPopupMenu"
-                          anchor="after"
-                          relative-to-action="RefactoringMenu"/>
-        </action>
-        <action id="SyncEditModePasteAction"
-                class="org.ideaplugins.syncedit.SyncEditModePasteAction"
-                text="Paste with SyncEdit"
-                description="Execute a paste, setting SyncEdit mode on the pasted block">
-            <keyboard-shortcut keymap="$default"
-                               first-keystroke="ctrl alt INSERT"/>
-            <add-to-group group-id="CutCopyPasteGroup"
-                          anchor="after"
-                          relative-to-action="EditorPasteSimple"/>
-        </action>
-        <action id="PreviousSyncEditableWordAction"
-                class="org.ideaplugins.syncedit.PreviousSyncEditableWordAction"
-                text="Previous SyncEditable Word"
-                description="Selects the previous SyncEditable word when in SyncEdit Mode">
-            <keyboard-shortcut keymap="$default"
-                               first-keystroke="ctrl TAB"/>
-            <add-to-group group-id="EditorActions"
-                          anchor="last"/>
-            <add-to-group group-id="GoToMenu"
-                          anchor="after"
-                          relative-to-action="GotoPreviousTodo"/>
-        </action>
-        <action id="NextSyncEditableWordAction"
-                class="org.ideaplugins.syncedit.NextSyncEditableWordAction"
-                text="Next SyncEditable Word"
-                description="Selects the next SyncEditable word when in SyncEdit Mode">
-            <keyboard-shortcut keymap="$default"
-                               first-keystroke="TAB"/>
-            <add-to-group group-id="EditorActions"
-                          anchor="last"/>
-            <add-to-group group-id="GoToMenu"
-                          anchor="after"
-                          relative-to-action="PreviousSyncEditableWordAction"/>
-        </action>
-    </actions>
+  </change-notes>
+  <idea-version since-build="111.0001"/>
+  <application-components>
+    <component>
+      <implementation-class>org.ideaplugins.syncedit.SyncEditApplicationComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>org.ideaplugins.syncedit.Configuration</implementation-class>
+    </component>
+  </application-components>
+  <project-components>
+    <component>
+      <implementation-class>org.ideaplugins.syncedit.SyncEditProjectComponent</implementation-class>
+    </component>
+  </project-components>
+  <actions>
+    <action id="SyncEditModeAction"
+            class="org.ideaplugins.syncedit.SyncEditModeAction"
+            text="SyncEdit Mode"
+            description="Activate SyncEdit Mode"
+            icon="/org/ideaplugins/syncedit/resources/syncedit.png">
+      <keyboard-shortcut keymap="$default"
+                         first-keystroke="meta S"/>
+      <add-to-group group-id="EditorPopupMenu"
+                    anchor="after"
+                    relative-to-action="RefactoringMenu"/>
+    </action>
+    <action id="SyncEditModePasteAction"
+            class="org.ideaplugins.syncedit.SyncEditModePasteAction"
+            text="Paste with SyncEdit"
+            description="Execute a paste, setting SyncEdit mode on the pasted block">
+      <keyboard-shortcut keymap="$default"
+                         first-keystroke="ctrl alt INSERT"/>
+      <add-to-group group-id="CutCopyPasteGroup"
+                    anchor="after"
+                    relative-to-action="EditorPasteSimple"/>
+    </action>
+    <action id="PreviousSyncEditableWordAction"
+            class="org.ideaplugins.syncedit.PreviousSyncEditableWordAction"
+            text="Previous SyncEditable Word"
+            description="Selects the previous SyncEditable word when in SyncEdit Mode">
+      <keyboard-shortcut keymap="$default"
+                         first-keystroke="ctrl TAB"/>
+      <add-to-group group-id="EditorActions"
+                    anchor="last"/>
+      <add-to-group group-id="GoToMenu"
+                    anchor="after"
+                    relative-to-action="GotoPreviousTodo"/>
+    </action>
+    <action id="NextSyncEditableWordAction"
+            class="org.ideaplugins.syncedit.NextSyncEditableWordAction"
+            text="Next SyncEditable Word"
+            description="Selects the next SyncEditable word when in SyncEdit Mode">
+      <keyboard-shortcut keymap="$default"
+                         first-keystroke="TAB"/>
+      <add-to-group group-id="EditorActions"
+                    anchor="last"/>
+      <add-to-group group-id="GoToMenu"
+                    anchor="after"
+                    relative-to-action="PreviousSyncEditableWordAction"/>
+    </action>
+  </actions>
 </idea-plugin>
