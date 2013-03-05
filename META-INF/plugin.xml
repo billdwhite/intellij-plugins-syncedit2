@@ -41,7 +41,7 @@
   <change-notes><![CDATA[
     <ul>
       <li>2.0.2 - Added settings panel with option to enabled/disable syncedit feature and to switch between using
-      global/word selection. Fixed bug with where syncedit would not stay active if multiple intellij windows were
+      global/word selection. Fixed bug where syncedit would not stay active if multiple intellij windows were
       open at the same time.
     </ul>
     <ul>
