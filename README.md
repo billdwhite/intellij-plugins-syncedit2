@@ -6,3 +6,6 @@ This is an attempt to revive this plugin and get it working with versions 12 and
 of code, then select a word and change it. Any corresponding instances of that word within the selected range will also be updated.
 There is also a 'paste with SyncEdit' feature that activates upon the pasting results into the editor.  Additional information
 can be found at http://www.billdwhite.com/wordpress/?p=571.
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/billdwhite/intellij-plugins-syncedit2/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
