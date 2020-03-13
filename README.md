@@ -1,4 +1,5 @@
-SyncEdit 2
+SyncEdit 2 - 
+As of 2014, the Intellij client has provided similiar functionality.  Thus, this project is no longer actively maintained or supported.
 =========
 
 SyncEdit version 2 IntelliJ Plugin - Updated version of original SyncEdit plugin by Nathan Brown which has been abandoned since 2006.
@@ -9,3 +10,4 @@ can be found at http://www.billdwhite.com/wordpress/?p=571.
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/billdwhite/intellij-plugins-syncedit2/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+As of 2014, the Intellij client has provided similiar functionality.  Thus, this project is no longer actively maintained or supported.
